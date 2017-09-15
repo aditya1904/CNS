@@ -5,10 +5,8 @@
 
 import sys
 
-#alphabets = list('abcdefghijklmnopqrstuvwxyz')
 alphabets = list('abcdefghijklmnopqrstuvwxyz.,!')
 punctuation = '"#$%&\'()*+-/:;<=>?@[\\]^_`{|}~'
-len_alpha = len(alphabets)
 
 def remove_punctuation(message):
 	message = message.translate(None, punctuation); #removing "#$%&\'()*+-/:;<=>?@[\\]^_`{|}~
@@ -41,8 +39,8 @@ def display_format(message):
 	return enc
 
 def modular_multiplicative_inverse(number):
-	for i in range(len_alpha):
-		if (number*i)%len_alpha == 1:
+	for i in range(29):
+		if (number*i)%29 == 1:
 			return i
 	return 0
 
@@ -76,7 +74,7 @@ def key_matrix_inverse(matrix):
 	determinant = modular_multiplicative_inverse(determinant) # why do you need modular_multiplicative_inverse? Answer : https://wikipedia.org/wiki/Hill_cipher
 	for r in range(len(cofactors)):
 		for c in range(len(cofactors)):
-			cofactors[r][c] = (cofactors[r][c]*determinant)%len_alpha
+			cofactors[r][c] = (cofactors[r][c]*determinant)%29
 	return cofactors
 
 def matrix_multiply(matrix_1, matrix_2):
@@ -90,7 +88,7 @@ def matrix_multiply(matrix_1, matrix_2):
 				res = 0
 				for k in range(len(matrix_2)):
 					res += (matrix_1[i][k] * matrix_2[k][j])
-				row.append(alphabets[res%len_alpha])
+				row.append(alphabets[res%29])
 			cipher_matrix[i] = row
 		cipher_matrix = matrix_transpose(cipher_matrix) ## transpose of a matrix
 		return cipher_matrix
