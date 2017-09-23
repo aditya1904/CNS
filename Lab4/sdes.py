@@ -1,19 +1,19 @@
 #!/usr/bin/env python
 import sys
-p10 = [3, 5, 2, 7, 4, 10, 1, 9, 8, 6]
-p8 = [6, 3, 7, 4, 8, 5, 10, 9]
-p4 = [2, 4, 3, 1]
-ip = [2, 6, 3, 1, 4, 8, 5, 7]
-inverseip = [4, 1, 3, 5, 7, 2, 8, 6]
-ep = [4, 1, 2, 3, 2, 3, 4, 1]
-s0 = [['01', '00', '11', '10'], #[1, 0, 3, 2]
+p10 = (3, 5, 2, 7, 4, 10, 1, 9, 8, 6)
+p8 = (6, 3, 7, 4, 8, 5, 10, 9)
+p4 = (2, 4, 3, 1)
+ip = (2, 6, 3, 1, 4, 8, 5, 7)
+inverseip = (4, 1, 3, 5, 7, 2, 8, 6)
+ep = (4, 1, 2, 3, 2, 3, 4, 1)
+s0 = (['01', '00', '11', '10'], #[1, 0, 3, 2]
 		['11', '10', '01', '00'], #[3, 2, 1, 0]
 		['00', '10', '01', '11'], #[0, 2, 1, 3],
-		['11', '01', '11', '10']] #[3, 1, 3, 2]
-s1 = [['00', '01', '10', '11'], #[0, 1, 2, 3]
+		['11', '01', '11', '10']) #[3, 1, 3, 2]
+s1 = (['00', '01', '10', '11'], #[0, 1, 2, 3]
 		['10', '00', '01', '11'], #[2, 0, 1, 3]
 		['11', '00', '01', '00'], #[3, 0, 1, 0],
-		['10', '01', '00', '11']] #[2, 1, 0, 3]
+		['10', '01', '00', '11']) #[2, 1, 0, 3]
 
 def shiftleftn(K, n):
 	return K[n:] + K[:n]
@@ -105,20 +105,48 @@ def encrypt(P, K):
 	E = doinverseIP(P4)
 	return E
 
+def decrypt(C, K):
+	K1, K2 = generate_keys(K)
+	C1 = doIP(C)
+	C2 = do_fK(C1, K2)
+	C3 = C2[4:]+C2[:4]
+	C4 = do_fK(C3, K1)
+	D = doinverseIP(C4)
+	return D
+
 def main():
 	print '-'*40
-	P = map(int, list(raw_input("Enter 8 bit plaintext (eg. 10100101) - "))) #8 bit plaintext
-	if len(P) != 8:
-		print "Enter only 8 bit plaintext!"
-		sys.exit(0)
+	case = int(raw_input("Option 1 to encrypt\nOption 2 to decrypt \nEnter option : "))
+	## Encrypt case
+	if case == 1:
+		P = map(int, list(raw_input("Enter 8 bit plaintext (eg. 10100101) - "))) #8 bit plaintext
+		if len(P) != 8:
+			print "Enter only 8 bit plaintext!"
+			sys.exit(0)
 
-	K = map(int, list(raw_input("Enter 10 bit key (eg. 1110000110) - "))) #10 bit key
-	if len(K) != 10:
-		print "Enter only 10 bit key!"
-		sys.exit(0)
+		K = map(int, list(raw_input("Enter 10 bit key (eg. 1110000110) - "))) #10 bit key
+		if len(K) != 10:
+			print "Enter only 10 bit key!"
+			sys.exit(0)
 
-	E = encrypt(P, K)
-	print "Encrypted - ", ''.join(map(str, E))
+		E = encrypt(P, K)
+		print "Encrypted - ", ''.join(map(str, E))
+	##
+	##Decrypt case
+	if case == 2:
+		C = map(int, list(raw_input("Enter 8 bit ciphertext (eg. 10100101) - "))) #8 bit ciphertext
+		if len(C) != 8:
+			print "Enter only 8 bit ciphertext!"
+			sys.exit(0)
+
+		K = map(int, list(raw_input("Enter 10 bit key (eg. 1110000110) - "))) #10 bit key
+		if len(K) != 10:
+			print "Enter only 10 bit key!"
+			sys.exit(0)
+
+		D = decrypt(C, K)
+		print "Decrypted - ", ''.join(map(str, D))
+	##
 	print '-'*40
 
 if __name__ == '__main__':
