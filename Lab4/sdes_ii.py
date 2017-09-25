@@ -18,10 +18,6 @@ hextobin = {'0':'0000', '1':'0001', '2':'0010', '3':'0011',
 			'4':'0100', '5':'0101', '6':'0110',	'7':'0111',
 			'8':'1000', '9':'1001', 'A':'1010', 'B':'1011',
 			'C':'1100',	'D':'1101', 'E':'1110', 'F':'1111'}
-bintohex = {'0000':'0', '0001':'1', '0010':'2', '0011':'3',
-			'0100':'4', '0101':'5', '0110':'6',	'0111':'7',
-			'1000':'8', '1001':'9', '1010':'A', '1011':'B',
-			'1100':'C',	'1101':'D', '1110':'E', '1111':'F'}
 
 def shiftleftn(K, n):
 	return K[n:] + K[:n]
@@ -135,6 +131,8 @@ def main():
 	print '-'*40
 	C = "15629177698EF862D42F77E8F862B7F8E87706CB8EC72F5A62C75A6215CBCB0DC7F8B762447706CB8E2FA9779DCB4C06"
 	CT = gen_8bit_sequences(C)
+	print "Writing all possible plaintext to file \"decrypt.output\""
+	f = open("decrypt.output", "w")
 	for key in range(1024):
 		DT = []
 		PT = ''
@@ -143,9 +141,10 @@ def main():
 			DT.append(decrypt(bit_seq, K))
 		for plain_bits in DT:
 			PT += chr(int(''.join(map(str, plain_bits)), 2))
-			#PT += bintohex[''.join(map(str, plain_bits[:4]))]
 		PT = PT.decode('unicode_escape','ignore').encode('utf-8')
-		print key, ": ", PT
+		write_buffer = ''.join(map(str, K)) + ": " + PT + "\n"
+		f.write(write_buffer)
+	f.close()
 	print '-'*40
 if __name__ == '__main__':
 	main()
