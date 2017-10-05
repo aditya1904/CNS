@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+#
+# Copyright (c) 2017 by Aditya Malu adityamalu1@gmail.com. All Rights Reserved.
+# 
 import sys
 p10 = (3, 5, 2, 7, 4, 10, 1, 9, 8, 6)
 p8 = (6, 3, 7, 4, 8, 5, 10, 9)
