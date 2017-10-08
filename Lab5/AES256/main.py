@@ -1,5 +1,4 @@
-import readKeyFile
-from readBlockFile import *
+from readfiles import *
 from AES256 import *
 import argparse
 from argparse import RawTextHelpFormatter
@@ -12,11 +11,8 @@ args = parser.parse_args()
 mode = str(args.mode).lower()
 
 def fileEncrypt():
-	start = time.clock()
 	block = getEncryptBlock("testBlock")
-	print len(block)
-	startkrypt = time.clock()
-	key = readKeyFile.getKey("testKey")
+	key = getKey("testKey")
 	outfile = open("encrypted_file","wb")
 	strangen = ""
 	cryptLargeblock = []
@@ -30,21 +26,14 @@ def fileEncrypt():
 		i += 1
 	outfile.write(strangen)
 	outfile.close()
-	kryptelapsed = time.clock()-startkrypt
-	elapsed = time.clock()-start
-	print len(cryptLargeblock)
-	print "Total Tid: " + str(elapsed)
-	print "Krypteringstid: " + str(kryptelapsed)
+	print strangen
 
 def fileDecrypt():
-	start = time.clock()
-	key = readKeyFile.getKey("testKey")
+	key = getKey("testKey")
 	file = open("decrypted_file","wb")
-	decrypttime = time.clock()
 	decryptBlock = []
 	decString = ""
 	eblock = getDecryptBlock("encrypted_file")
-	print len(eblock)
 
 	for i in range(len(eblock)):
 		decryptBlock.append(decrypt(eblock[i],key))
@@ -55,10 +44,7 @@ def fileDecrypt():
 
 	file.write(decString)
 	file.close()
-	decryptelapsed = time.clock()-decrypttime
-	elapsed = time.clock()-start
-	print "Total Tid: " + str(elapsed)
-	print "Dekrypteringstid: " + str(decryptelapsed)
+	print decString
 
 if mode == "encrypt" or mode == "e":
 	fileEncrypt()
