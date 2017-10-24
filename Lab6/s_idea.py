@@ -1,6 +1,10 @@
 #!/usr/bin/env python
+
+#
+# Copyright (c) 2017 by Aditya Malu adityamalu1@gmail.com. All Rights Reserved.
+#
+
 import sys
-from string import punctuation
 
 bin_to_int = {'0000':0, '0001':1, '0010':2, '0011':3, '0100':4, '0101':5, '0110':6 , '0111':7, '1000':8, '1001':9, '1010':10, '1011':11,
 			'1100':12, '1101':13, '1110':14, '1111':15 }
@@ -127,14 +131,23 @@ def encrypt_decrypt(text, keys):
 	return ctext
 
 def main():
-	key = readfile(raw_input("Enter key file: "))
-	keys = generate_encryption_keys(key)
-	plaintext = readfile(raw_input("Enter plaintext file: "))
-	plaintext = readfile("plaintext")
-	encrypted = encrypt_decrypt(plaintext, keys)
-	print "Encrypted: ", encrypted
-	de_keys = generate_decryption_keys(key)
-	detext = encrypt_decrypt(encrypted, de_keys)
-	print "Decrypted: ", detext
+	print '-'*40
+	case = int(raw_input("Option 1 to encrypt\nOption 2 to decrypt \nEnter option : "))
+	## Encrypt case
+	if case == 1:
+		key = readfile(raw_input("Enter key file: "))
+		keys = generate_encryption_keys(key)
+		plaintext = readfile(raw_input("Enter plaintext file: "))
+		encrypted = encrypt_decrypt(plaintext, keys)
+		print "Encrypted: ", encrypted
+	## Decrypt case
+	if case == 2:
+		key = readfile(raw_input("Enter key file: "))
+		de_keys = generate_decryption_keys(key)
+		ciphertext = readfile(raw_input("Enter ciphertext file: "))
+		detext = encrypt_decrypt(ciphertext, de_keys)
+		print "Decrypted: ", detext
+	print '-'*40
+
 if __name__ == '__main__':
 	main()
