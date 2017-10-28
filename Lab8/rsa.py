@@ -6,6 +6,8 @@
 ## Sample Program to show the working of RSA cryptosystem ##
 
 from random import *
+import json
+import sys
 
 max_of_p_q = 10000
 
@@ -75,15 +77,38 @@ def decrypt(private_key, ciphertext):
 	return plaintext
 
 def main():
-	public_key, private_key = generate_keys()
-	print "Public Key (e, n) : ", public_key
-	print "Private Key (d, n) : ", private_key
-	m = int(raw_input("Enter message num: "))
-	ciphertext = encrypt(public_key, m)
-	print "Encrypted: ", ciphertext
-	plaintext = decrypt(private_key, ciphertext)
-	print "Decrypted: ", plaintext
-	assert m == plaintext, "Message and deciphered text don't match"
+	case = int(raw_input("1 to generate keys and save in file\n2 to encrypt\n3 to decrypt\n"))
+	if case == 1:
+		public_key, private_key = generate_keys()
+		print "Public Key (e, n) : ", public_key
+		print "Private Key (d, n) : ", private_key
+		pubkey = {}
+		pubkey["e"] = public_key[0]
+ 		pubkey["n"] = public_key[1]
+		with open("public_key.json", "w") as pubkeyfile:
+			json.dump(pubkey, pubkeyfile)
+		prikey = {}
+		prikey["d"] = private_key[0]
+ 		prikey["n"] = private_key[1]
+		with open("private_key.json", "w") as prikeyfile:
+			json.dump(prikey, prikeyfile)
+	elif case == 2:
+		m = int(raw_input("Enter message num: "))
+		with open("public_key.json", "r") as pubkeyfile:
+			pubkey = json.load(pubkeyfile)
+		public_key = (pubkey["e"], pubkey["n"])
+		ciphertext = encrypt(public_key, m)
+		print "Encrypted: ", ciphertext
+	elif case == 3:
+		ciphertext = int(raw_input("Enter Encrypted num: "))
+		with open("private_key.json", "r") as prikeyfile:
+			prikey = json.load(prikeyfile)
+		private_key = (prikey["d"], prikey["n"])
+		plaintext = decrypt(private_key, ciphertext)
+		print "Decrypted: ", plaintext
+	else:
+		print "Invalid option\n"
+		sys.exit(0)
 
 if __name__ == "__main__":
 	main()
